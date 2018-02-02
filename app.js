@@ -8,7 +8,7 @@ var app = express();
 var dbUrl = 'mongodb://localhost:27017/mymovie';
 mongoose.connect(dbUrl);
 
-app.set('views', './views/pages');
+app.set('views', './app/views/pages');
 app.set('view engine', 'jade');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.cookieParser());
