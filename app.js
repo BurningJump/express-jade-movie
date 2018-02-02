@@ -20,6 +20,13 @@ app.use(express.session({
     })
 }));
 
+if('development' === app.get('env')) {
+    app.set('showStackError', true);
+    app.use(express.logger(':mehtod :url :status'));
+    app.locals.pretty = true;
+    mongoose.set('debug', true);
+}
+
 require('./config/routes')(app);
 
 app.use(express.static(path.join(__dirname, 'public')));
