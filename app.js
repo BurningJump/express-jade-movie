@@ -1,6 +1,7 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var Movie = require('./models/movie');
+var User = require('./models/user');
 var _ = require('underscore');
 var path = require('path');
 var bodyParser = require('body-parser');
@@ -29,6 +30,53 @@ app.get('/', function(req, res) {
             title: '首页',
             movies: movies,
         })    
+    })
+})
+
+// signup
+app.post('user/signup', function(req, res) {
+    var _user = req.body.user;
+    
+    User.find({name: _user.name}, function(err, user) {
+        if(err) {
+            console.log(err);
+        }
+        
+        if(user) {
+            return res.redirect('/');
+        } else {
+            var user = new User(_user);
+            user.save(function(err, user) {
+                if(err) {
+                    console.log(err);
+                }
+        
+                res.redirect('/');
+            })
+        }
+    })
+})
+
+// signin
+app.post('user/signin', function(req, res) {
+    var _user = req.body.user;
+    var name = _user.name;
+    var password = _user.password;
+
+    User.findOne({name: name}, )
+})
+
+// userList page
+app.get('/admin/userList', function (req, res) {
+    User.fetch(function (err, users) {
+        if (err) {
+            console.log(err);
+        }
+
+        res.render('userList', {
+            title: '用户列表',
+            users: users,
+        })
     })
 })
 
