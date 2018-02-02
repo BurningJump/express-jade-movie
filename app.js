@@ -1,5 +1,6 @@
 var express = require('express');
 var mongoose = require('mongoose');
+var mongoStore = require('connect-mongo')(express);
 var Movie = require('./models/movie');
 var User = require('./models/user');
 var _ = require('underscore');
@@ -7,15 +8,19 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var port = process.env.PORT || 3000;
 var app = express();
-
-mongoose.connect('mongodb://localhost:27017/mymovie');
+var dbUrl = 'mongodb://localhost:27017/mymovie';
+mongoose.connect(dbUrl);
 
 app.set('views', './views/pages');
 app.set('view engine', 'jade');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.cookieParser());
 app.use(express.session({
-    secret: 'imooc'
+    secret: 'imooc',
+    store: new mongoStore({
+        url: dbUrl,
+        collection: 'sessions'
+    })
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.locals.moment = require('moment');
@@ -23,10 +28,21 @@ app.listen(port);
 
 console.log('express-jade start on port ' + port);
 
+//pre handle user
+app.use(function (req, res, next) {
+    var _user = req.session.user;
+    if (_user) {
+        app.locals.user = _user;
+    }
+    
+    return next();
+})
+
 // index page
 app.get('/', function(req, res) {
     console.log('user in session: ');
     console.log(req.session.user);
+
     Movie.fetch(function(err, movies) {
         if(err) {
             console.log(err);
@@ -91,6 +107,13 @@ app.post('user/signin', function(req, res) {
             }
         })
     })
+})
+
+//logout
+app.get('/logout', function (req, res) {
+    delete req.session.user;
+    delete app.locals.user;
+    res.redirect('/');
 })
 
 // userList page
