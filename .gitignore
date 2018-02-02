@@ -5,15 +5,5 @@
 dump.rdb
 node_modules
 */node_modules
-upload
 npm-debug.log
-config
-laihua-engine/.project
-app.js
-views/store
-public/store
-pubic/store/index.html
-platform-vue/config/index.js
-config/mysqlConfig.js
-bin
-platform/config
+public/libs/
