@@ -1,0 +1,22 @@
+{
+  "name": "my-movie",
+  "authors": [
+    "zhangbolin <zhangbolin@laihua.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "4.0.0",
+    "jquery": "^3.3.1"
+  }
+}
