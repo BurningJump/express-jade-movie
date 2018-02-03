@@ -19,18 +19,33 @@ module.exports = function(grunt) {
 
         nodemon: {
             dev: {
+                script: 'app.js',
                 options: {
-                    file: 'app.js',
-                    args: [],
+                    args: ['dev'],
+                    nodeArgs: ['--debug'],
+                    callback: function (nodemon) {
+                        nodemon.on('log', function (event) {
+                            console.log(event.colour);
+                        });
+                    },
+                    ignore: ['node_modules/**'],
                     ignoredFiles: ['README.md', 'node_modules/**', '.DS_Store'],
+                    ext: 'js, coffee',
+                    watch: ['server'],
                     watchedExtensions: ['js'],
                     watchedFolders: ['./'],
                     debug: true,
-                    delayTime: 1,
+                    delayTime: 1000,
+                    legacyWatch: true,
                     env: {
                         PORT: 3000
                     },
                     cwd: __dirname
+                }
+            },
+            exec: {
+                options: {
+                    exec: 'less'
                 }
             }
         },
