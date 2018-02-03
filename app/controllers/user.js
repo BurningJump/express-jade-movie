@@ -1,16 +1,28 @@
 var User = require('../models/user');
 
 // signup
+exports.showSignup = function (req, res) {
+    res.render('signup', {
+        title: '注册页面'
+    })
+}
+
+// signin
+exports.showSignin = function (req, res) {
+    res.render('signin', {
+        title: '登录页面'
+    })
+}
+
 exports.signup = function (req, res) {
     var _user = req.body.user;
-
-    User.find({ name: _user.name }, function (err, user) {
+    User.findOne({ name: _user.name }, function (err, user) {
         if (err) {
             console.log(err);
         }
 
         if (user) {
-            return res.redirect('/');
+            return res.redirect('/signin');
         } else {
             var user = new User(_user);
             user.save(function (err, user) {
@@ -36,7 +48,7 @@ exports.signin = function (req, res) {
         }
 
         if (!user) {
-            return res.redirect('/');
+            return res.redirect('/signup');
         }
 
         user.comparePassword(password, function (err, isMatch) {
@@ -49,6 +61,7 @@ exports.signin = function (req, res) {
                 return res.redirect('/');
             } else {
                 console.log('Password is not matched');
+                return res.redirect('/signin');
             }
         })
     })
@@ -61,16 +74,36 @@ exports.logout = function (req, res) {
     res.redirect('/');
 }
 
-// userList page
+// userlist page
 exports.list = function (req, res) {
     User.fetch(function (err, users) {
         if (err) {
             console.log(err);
         }
 
-        res.render('userList', {
+        res.render('userlist', {
             title: '用户列表',
             users: users,
         })
     })
+}
+
+// middleware for user
+exports.signinRequired = function(req, res, next) {
+    var user = req.session.user;
+    if(!user) {
+        return res.redirect('/signin');
+    }
+    
+    next();
+}
+
+// middleware for admin
+exports.adminRequired = function(req, res, next) {
+    var user = req.session.user;
+    if(user.role < 10) {
+        return res.redirect('/signin');
+    }
+    
+    next();
 }

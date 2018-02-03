@@ -27,7 +27,7 @@ MovieSchema.pre('save', function(next) {
     } else {
         this.meta.updateAt = Date.now();
     }
-
+    console.log('保存电影')
     next();
 })
 
@@ -38,7 +38,7 @@ MovieSchema.statics = {
             .sort('meta.updateAt')
             .exec(cb)
     },
-    findById: function(cb) {
+    findById: function(id, cb) {
         return this
             .findOne({_id: id})
             .exec(cb)
