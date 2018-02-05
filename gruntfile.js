@@ -22,30 +22,16 @@ module.exports = function(grunt) {
                 script: 'app.js',
                 options: {
                     args: ['dev'],
-                    nodeArgs: ['--debug'],
-                    callback: function (nodemon) {
-                        nodemon.on('log', function (event) {
-                            console.log(event.colour);
-                        });
-                    },
-                    ignore: ['node_modules/**'],
-                    ignoredFiles: ['README.md', 'node_modules/**', '.DS_Store'],
-                    ext: 'js, coffee',
-                    watch: ['server'],
-                    watchedExtensions: ['js'],
-                    watchedFolders: ['./'],
+                    //nodeArgs: ['--debug'],
+                    ignore: ['README.md', 'node_modules/**', '.DS_Store'],
+                    ext: 'js',
+                    watch: ['./'],
                     debug: true,
-                    delayTime: 1000,
-                    legacyWatch: true,
+                    delay: 1000,
                     env: {
                         PORT: 3000
                     },
                     cwd: __dirname
-                }
-            },
-            exec: {
-                options: {
-                    exec: 'less'
                 }
             }
         },
