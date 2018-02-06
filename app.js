@@ -11,6 +11,7 @@ var app = express();
 var fs = require('fs');
 var dbUrl = 'mongodb://localhost:27017/mymovie';
 mongoose.connect(dbUrl);
+var serveStatic = require('serve-static');
 
 // models loading
 var models_path = __dirname + '/app/models';
@@ -35,10 +36,13 @@ walk(models_path);
 app.set('views', './app/views/pages');
 app.set('view engine', 'jade');
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(express.multipart());
 app.use(session({
     secret: 'imooc',
+    resave: false,
+    saveUninitialized: true,
+    //cookie: { secure: true },
     store: new MongoStore({
         url: dbUrl,
         collection: 'sessions'
@@ -47,15 +51,17 @@ app.use(session({
 
 require('./config/routes')(app);
 
-if('development' === app.get('env')) {
+var env = process.env.NODE_ENV || 'development';
+if('development' === env) {
     app.set('showStackError', true);
     app.use(morgan(':method :url :status'));
+    //morgan(':method :url :status :res[content-length] - :response-time ms')
     app.locals.pretty = true;
     mongoose.set('debug', true);
 }
 
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(serveStatic(path.join(__dirname, 'public')));
 app.locals.moment = require('moment');
 app.listen(port);
 

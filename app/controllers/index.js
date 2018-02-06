@@ -43,7 +43,7 @@ exports.search = function (req, res) {
                     title: '搜索结果',
                     keyword: category.name,
                     currentPage: (page + 1),
-                    query: 'cat=' + carId,
+                    query: 'cat=' + catId,
                     totalPage: Math.ceil(movies.length / count),
                     movies: results,
                 })
