@@ -4,11 +4,11 @@ block content
     .container
         .row
             each cat in categories
-                .panel.panel-default
-                    .panel-heading
+                .card
+                    .card-header
                         h3
                         a(href="/results?cat=#{cat._id}&p=0") #{cat.name}
-                    .panel-body
+                    .card-body
                         if cat.movies && cat.movies.length > 0
                             each item in cat.movies
                                 .col-md-2
