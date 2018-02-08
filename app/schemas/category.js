@@ -41,4 +41,4 @@ CategorySchema.statics = {
     }
 }
 
-module.exports = CategorySchema
+module.exports = CategorySchema;

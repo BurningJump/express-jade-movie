@@ -59,4 +59,4 @@ CommentSchema.statics = {
     }
 }
 
-module.exports = CommentSchema
+module.exports = CommentSchema;
